@@ -1,0 +1,39 @@
+build*/
+output
+.idea
+.iml
+.sln
+*.swp
+*.local
+.DS_Store
+*.tmp
+.gradle
+third_module
+build.properties.local
+cmake-build-*
+*.params
+# eclipse
+.*project
+
+# windows
+windows
+win64
+
+# vscode
+.vscode
+.idea
+
+vis_result
+*kernel_meta*
+models
+
+conan.lock
+conanbuildinfo.*
+conaninfo.*
+
+# data
+/install
+/log
+/tmp
+auto-launch/logs/
+cmake/pg_cpm_functions.cmake
