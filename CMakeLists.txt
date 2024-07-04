@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.5.1)
 
 project(epiphyllum)
 
+option(ENABLE_TEST "Build test" ON)
+
 set(CMAKE_INSTALL_PREFIX ${PROJECT_BINARY_DIR}/output)
 set(CMAKE_CXX_STANDARD 17)
 
@@ -15,6 +17,8 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
 set(CMAKE_THREAD_LIBS_INIT "-lpthread")
 
 include_directories(include)
+
+set(LIB_NAME epiphyllum)
 
 add_subdirectory(src)
 add_subdirectory(demo)

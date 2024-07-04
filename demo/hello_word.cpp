@@ -1,6 +1,9 @@
 #include <iostream>
+#include <util/log.h>
 
 int main(){
-  std::cout << "hello world" << std::endl;
+  epiphiyllum::Config config;
+  log_init(config);
+  LOG_WARN << "hello world";
   return 0;
 }
