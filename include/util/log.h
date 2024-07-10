@@ -2,8 +2,12 @@
 #include <fstream>
 #include <iostream>
 #include <string>
+#include <sstream>  
 
 #include "util/config.h"
+#include "util/system_util.h"
+
+
 
 // 定义颜色的宏
 #define ANSI_COLOR_RED     "\e[31m"
@@ -22,54 +26,59 @@ enum class Level{
   ERROR
 };
 
+Level log_level = Level::INFO;
+bool log_write_ = false;
+std::string default_log_name = "log";
+
 class LogMessage{
 public:
-  void init(Config config);
+  // void init(Log* log);
   LogMessage& operator<<(const std::string& str);
-  LogMessage& operator()(const Level& level);
-  void flush();
-  ~LogMessage();
+  template<typename T>
+  LogMessage& operator<<(const T& value){
+    std::ostringstream oss;  
+    oss << value;
+    *this << oss.str();
+    return *this; 
+  }
+  LogMessage(){}
+  LogMessage(const Level& level);
+  ~LogMessage(){
+  }
+
+  std::string get_header() {return header_;}
+  std::string get_buff() {return buff_;}
 
 private:
   std::string header_;
   std::string buff_;
-
-  bool is_write_;
-  bool color_;
-  std::ofstream writer_;
 };
 
 class Log{
 public:
-  void init(Config config){
-    message_.init(config);
+  Log(const Level& level, std::string file_name, int line_number, std::string func): 
+    message_(LogMessage(level)), file_name_(file_name), line_number_(line_number), func_(func){
   }
+  ~Log();
+  void write(const std::string& str);
+  LogMessage& stream(){
+    return message_;
+  };
 
-  Log& operator()(const Level& level){
-    message_(level);
-    return *this;
-  }
-
-  Log& operator<<(const std::string& str){
-    message_ << str;
-    message_.flush();
-    return *this;
-  }
 private:
+  std::ofstream writer_;
   LogMessage message_;
+  std::string file_name_;
+  int line_number_;
+  std::string func_;
 };
-
-static Log logger;
-
-#define LOG(level) epiphiyllum::logger(level)
-
-#define LOG_INFO LOG(epiphiyllum::Level::INFO)
-#define LOG_WARN LOG(epiphiyllum::Level::WARN)
-#define LOG_ERROR LOG(epiphiyllum::Level::ERROR)
-
 }
 
-void log_init(epiphiyllum::Config config){
-  epiphiyllum::logger.init(config);
-}
+#define LOG_INFO if(epiphiyllum::Level::INFO >= epiphiyllum::log_level) epiphiyllum::Log(epiphiyllum::Level::INFO , __FILE__, __LINE__, __func__).stream()
+#define LOG_WARN if(epiphiyllum::Level::WARN >= epiphiyllum::log_level) epiphiyllum::Log(epiphiyllum::Level::WARN , __FILE__, __LINE__, __func__).stream()
+#define LOG_ERROR if(epiphiyllum::Level::ERROR >= epiphiyllum::log_level) epiphiyllum::Log(epiphiyllum::Level::ERROR , __FILE__, __LINE__, __func__).stream()
+
+#define LOG(level) LOG_##level
+
+void log_init(epiphiyllum::Config config);
 

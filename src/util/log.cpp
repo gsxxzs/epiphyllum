@@ -1,51 +1,53 @@
 #include "util/log.h"
+#include <algorithm>
 
 
+
+void log_init(epiphiyllum::Config config){
+  // todo 增加log的配置文件
+  epiphiyllum::log_level = epiphiyllum::Level::INFO;
+  epiphiyllum::log_write_ = false;
+  if(epiphiyllum::log_write_){
+    epiphiyllum::default_log_name = std::string("log_") + std::string(epiphiyllum::util::get_process()) + ".log";
+    std::ofstream writer(epiphiyllum::default_log_name);
+    writer.close();
+  }
+}
 
 namespace epiphiyllum{
-
-void LogMessage::init(Config config){
-  // to do 实现config接口，外部传参数进行初始化
-  is_write_ = true;
-  color_ = true;
-  writer_.open("./log.log");
-}
 
 LogMessage& LogMessage::operator<<(const std::string& str){
   buff_ += str;
   return *this;
 }
 
-LogMessage& LogMessage::operator()(const Level& level){
-  std::string color = "";
+LogMessage::LogMessage(const Level& level){
   switch(level){
-    case Level::INFO:  
-      color = ANSI_COLOR_GREEN; 
-      header_ += "[I] "; 
-      break;
-    case Level::WARN: 
-      color = ANSI_COLOR_YELLOW;
-      header_ += "[W] ";
-      break;
-    case Level::ERROR:
-      color =  ANSI_COLOR_RED; 
-      header_ += "[E] "; 
-      break;
-  }
-  if(color_) header_ = color + header_;
-  return *this;
-}
-
-void LogMessage::flush(){
-  std::cout << header_ << NOW_TIMESTAMP << buff_ << std::endl;
-  if(is_write_){
-    writer_ << header_ << NOW_TIMESTAMP << buff_ << std::endl;
+    case Level::INFO: header_ += "[I"; break;
+    case Level::WARN: header_ += "[W"; break;
+    case Level::ERROR: header_ += "[E"; break;
   }
 }
 
-LogMessage::~LogMessage(){
-  if(is_write_){
-    writer_.close();
+Log::~Log(){
+  auto pos = std::find(file_name_.rbegin(), file_name_.rend(), '/');
+  std::string header = message_.get_header() + NOW_TIMESTAMP + "] [" + file_name_.substr(file_name_.rend() - pos) + ":" + std::to_string(line_number_)+ " " + func_+ "]";
+  this->write(header + NOW_TIMESTAMP + " " + message_.get_buff());
+
+}
+
+void Log::write(const std::string& str){
+  std::string color = "";
+  switch(str[1]){
+    case 'I': color = ANSI_COLOR_GREEN; break;
+    case 'W': color = ANSI_COLOR_YELLOW; break;
+    case 'E': color = ANSI_COLOR_RED; break;
+  }
+  std::cout << color << str << ANSI_COLOR_RESET << std::endl;
+
+  if(log_write_){
+    writer_.open(default_log_name, std::ios::app | std::ios::binary);
+    writer_ << str << std::endl;
   }
 }
 

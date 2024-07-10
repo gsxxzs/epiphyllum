@@ -14,8 +14,7 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 #设置库文件保存的目录
 set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
 
-set(CMAKE_THREAD_LIBS_INIT "-lpthread")
-
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread -fPIC  -Wall -Werror=return-type -Wno-error=shadow")
 include_directories(include)
 
 set(LIB_NAME epiphyllum)
