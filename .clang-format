@@ -1,0 +1,10 @@
+---
+BasedOnStyle:  Google
+ColumnLimit:     120              # 每行的最大长度
+AccessModifierOffset: -2          # private的缩进数量
+IndentWidth:     2                # 每个块缩进多少
+TabWidth:        2                # tab对应多少个空格
+UseTab:          Never
+
+MaxEmptyLinesToKeep: 3            # 最大空白行数量
+FixNamespaceComments: true        # namespace的结尾加上注释

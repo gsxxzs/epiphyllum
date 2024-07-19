@@ -1,10 +1,8 @@
 
 
 
-namespace epiphiyllum{
+namespace epiphiyllum {
 
-class Config{
-  
-};
+class Config {};
 
-}
+}  // namespace epiphiyllum

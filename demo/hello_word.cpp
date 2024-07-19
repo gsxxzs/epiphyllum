@@ -1,17 +1,18 @@
-#include <iostream>
-#include <thread>
 #include <unistd.h>
 #include <util/log.h>
+
+#include <iostream>
+#include <thread>
 // #include "yaml-cpp/yaml.h"
 
-int main(){
-  // std::string input = R"(  
-  //       a: 1  
-  //       b:  
-  //         c: 2  
-  //         d: [3, 4]  
-  //   )";  
-  
+int main() {
+  // std::string input = R"(
+  //       a: 1
+  //       b:
+  //         c: 2
+  //         d: [3, 4]
+  //   )";
+
   // auto doc = YAML::Load(input);
 
   epiphiyllum::Config config;
