@@ -1,7 +1,7 @@
 if(ENABLE_CUDA)
-  FILE(GLOB CUDA_SRCS ./cuda_kernel/*.cu)
+  FILE(GLOB CUDA_SRCS ./kernel/*.cu)
   if(ENABLE_TEST)
-    add_subdirectory(./cuda_kernel/test/)
+    add_subdirectory(./kernel/test/)
   endif()
 endif(ENABLE_CUDA)
 
@@ -14,3 +14,8 @@ if(ENABLE_CUDA)
 
   target_link_libraries(${LIB_NAME} ${CUDART_LIBRARY})
 endif(ENABLE_CUDA)
+
+install(TARGETS
+  ${LIB_NAME}
+  LIBRARY DESTINATION lib
+)
