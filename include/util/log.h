@@ -23,9 +23,9 @@ namespace epiphiyllum {
 
 enum class Level { INFO, WARN, ERROR };
 
-Level log_level = Level::INFO;
-bool log_write_ = false;
-std::string default_log_name = "log";
+extern Level log_level;
+extern bool log_write_;
+extern std::string default_log_name;
 
 class LogMessage {
 public:
