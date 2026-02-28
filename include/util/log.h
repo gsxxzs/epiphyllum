@@ -6,6 +6,7 @@
 
 #include "util/config.h"
 #include "util/system_util.h"
+#include "fmt/core.h"
 
 
 
@@ -22,9 +23,9 @@ namespace epiphiyllum {
 
 enum class Level { INFO, WARN, ERROR };
 
-Level log_level = Level::INFO;
-bool log_write_ = false;
-std::string default_log_name = "log";
+extern Level log_level;
+extern bool log_write_;
+extern std::string default_log_name;
 
 class LogMessage {
 public:
@@ -78,5 +79,9 @@ private:
   epiphiyllum::Log(epiphiyllum::Level::ERROR, __FILE__, __LINE__, __func__).stream()
 
 #define LOG(level) LOG_##level
+
+#define LOGI(str, ...) LOG_INFO << fmt::format(str, ##__VA_ARGS__);
+#define LOGW(str, ...) LOG_WARN << fmt::format(str, ##__VA_ARGS__);
+#define LOGE(str, ...) LOG_ERROR << fmt::format(str, ##__VA_ARGS__);
 
 void log_init(epiphiyllum::Config config);

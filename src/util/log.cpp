@@ -17,6 +17,10 @@ void log_init(epiphiyllum::Config config) {
 
 namespace epiphiyllum {
 
+Level log_level = Level::INFO;
+bool log_write_ = false;
+std::string default_log_name = "log";
+
 LogMessage& LogMessage::operator<<(const std::string& str) {
   buff_ += str;
   return *this;
